@@ -2222,7 +2222,13 @@ export const YieldableError: new(message?: string, options?: ErrorOptions) => Ca
       return fail(this)
     }
     toJSON() {
-      return { ...this }
+      return {
+        ...this,
+        name: this.name,
+        message: this.message,
+        ...(this.stack !== undefined ? { stack: this.stack } : undefined),
+        ...(this.cause !== undefined ? { cause: toJSON(this.cause) } : undefined)
+      }
     }
     [NodeInspectSymbol]() {
       if (this.toString !== globalThis.Error.prototype.toString) {
